@@ -76,7 +76,6 @@
 
 		<!-- Add menu command for "profile definition" dialog -->
 		<menuContribution
-		allPopups="false"
             locationURI="menu:tr.org.liderahenk.liderconsole.menus.ProfileDefinition?after=additions">
  				<command
                   commandId="tr.org.liderahenk.liderconsole.commands.SystemRestrictionProfile"
@@ -114,7 +113,6 @@
       
       	<!-- Add extension point contribution for "task execution" dialogs -->
 		<menuContribution
-      		allPopups="false"
             locationURI="popup:tr.org.liderahenk.liderconsole.menus.ApplyTask?after=additions">
  				<command
                   commandId="tr.org.liderahenk.liderconsole.commands.SystemRestrictionTask"
