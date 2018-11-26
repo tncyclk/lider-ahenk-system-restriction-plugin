@@ -16,6 +16,12 @@ import tr.org.liderahenk.liderconsole.core.model.Profile;
 import tr.org.liderahenk.system.restriction.constants.SystemRestrictionConstants;
 import tr.org.liderahenk.system.restriction.i18n.Messages;
 
+/**
+ * 
+ * @author <a href="mailto:tuncay.colak@tubitak.gov.tr">Tuncay ÇOLAK</a>
+ *
+ */
+
 public class SystemSettingsDialog extends TitleAreaDialog {
 	private TabFolder tabFolder;
 	
@@ -138,20 +144,6 @@ public class SystemSettingsDialog extends TitleAreaDialog {
 		cmbUxterm.setEnabled(isSelected_uxterm);
 		btnUxterm.setSelection(isSelected_uxterm);
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		tabItem.setControl(group);
-		
-		
-
-
 }
 }
