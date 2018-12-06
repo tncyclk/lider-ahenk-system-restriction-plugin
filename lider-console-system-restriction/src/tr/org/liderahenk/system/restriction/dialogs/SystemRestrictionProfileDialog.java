@@ -22,6 +22,13 @@ import tr.org.liderahenk.system.restriction.constants.SystemRestrictionConstants
 import tr.org.liderahenk.system.restriction.i18n.Messages;
 import tr.org.liderahenk.system.restriction.utils.SystemRestrictionUtils;
 
+/**
+ * 
+ * @author <a href="mailto:tuncay.colak@tubitak.gov.tr">Tuncay ÇOLAK</a>
+ *
+ */
+
+
 public class SystemRestrictionProfileDialog implements IProfileDialog {
 	
 	private static final Logger logger = LoggerFactory.getLogger(SystemRestrictionProfileDialog.class);

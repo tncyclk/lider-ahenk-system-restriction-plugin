@@ -101,7 +101,7 @@ public class SystemRestrictionTaskDialog extends DefaultTaskDialog {
 		});
 		cmbAppClick = new Combo(group, SWT.BORDER | SWT.DROP_DOWN | SWT.READ_ONLY);
 		cmbAppClick.setSize(10, 10 );
-		String items [] = {Messages.getString("Enabled"), Messages.getString("Disabled")};
+		String items [] = {Messages.getString("ENABLE"), Messages.getString("DISABLE")};
 		cmbAppClick.setItems(items);
 		cmbAppClick.setEnabled(false);
 		
@@ -119,7 +119,7 @@ public class SystemRestrictionTaskDialog extends DefaultTaskDialog {
 		});
 		cmbDesktopSettings = new Combo(group, SWT.BORDER | SWT.DROP_DOWN | SWT.READ_ONLY);
 		cmbDesktopSettings.setSize(10, 10 );
-		String items2 [] = {Messages.getString("Enabled"), Messages.getString("Disabled")};
+		String items2 [] = {Messages.getString("ENABLE"), Messages.getString("DISABLE")};
 		cmbDesktopSettings.setItems(items2);
 		cmbDesktopSettings.setEnabled(false);
 		
@@ -137,7 +137,7 @@ public class SystemRestrictionTaskDialog extends DefaultTaskDialog {
 		});
 		cmbHibernateClick = new Combo(group, SWT.BORDER | SWT.DROP_DOWN | SWT.READ_ONLY);
 		cmbHibernateClick.setSize(10, 10);
-		String items3 [] = {Messages.getString("Enabled"), Messages.getString("Disabled")};
+		String items3 [] = {Messages.getString("ENABLE"), Messages.getString("DISABLE")};
 		cmbHibernateClick.setItems(items3);
 		cmbHibernateClick.setEnabled(false);
 		
@@ -165,7 +165,7 @@ public class SystemRestrictionTaskDialog extends DefaultTaskDialog {
 		});
 		cmbPanel = new Combo(group, SWT.BORDER | SWT.DROP_DOWN | SWT.READ_ONLY);
 		cmbPanel.setSize(10, 10);
-		String items [] = {Messages.getString("Enabled"), Messages.getString("Disabled")};
+		String items [] = {Messages.getString("ENABLE"), Messages.getString("DISABLE")};
 		cmbPanel.setItems(items);
 		cmbPanel.setEnabled(false);
 		tabItem.setControl(group);
@@ -206,37 +206,37 @@ public class SystemRestrictionTaskDialog extends DefaultTaskDialog {
 		if (btnAppClick.getSelection()) {
 			if (cmbAppClick.getSelectionIndex() == 0) {
 			
-				params.put("allow-right-click", "active");
+				params.put(SystemRestrictionConstants.PARAMETERS.APP_RIGHT_CLICK, "active");
 			}
 			else {
-				params.put("allow-right-click", "passive");
+				params.put(SystemRestrictionConstants.PARAMETERS.APP_RIGHT_CLICK, "passive");
 			}
 		}
 			
 		if (btnDesktopSettings.getSelection()) {		
 			if (cmbDesktopSettings.getSelectionIndex() == 0) {
-				params.put("deny-desktop-settings", "active");
+				params.put(SystemRestrictionConstants.PARAMETERS.DESKTOP_SETTINGS, "active");
 			}
 			else {
-				params.put("deny-desktop-settings", "passive");
+				params.put(SystemRestrictionConstants.PARAMETERS.DESKTOP_SETTINGS, "passive");
 			}
 		}
 	
 		if (btnHibernateClick.getSelection()) {
 			if (cmbHibernateClick.getSelectionIndex() == 0) {
-				params.put("close-hibernate", "active");
+				params.put(SystemRestrictionConstants.PARAMETERS.HIBERNATE, "active");
 			}
 			else {
-				params.put("close-hibernate", "passive");
+				params.put(SystemRestrictionConstants.PARAMETERS.HIBERNATE, "passive");
 			}
 		}
 	
 		if (btnPanel.getSelection()) {
 			if (cmbPanel.getSelectionIndex() == 0) {
-				params.put("deny-panel-settings", "active");
+				params.put(SystemRestrictionConstants.PARAMETERS.PANEL_PREFERENCES, "active");
 			}
 			else {
-				params.put("deny-panel-settings", "passive");
+				params.put(SystemRestrictionConstants.PARAMETERS.PANEL_PREFERENCES, "passive");
 			}	
 		}
 		return params;
