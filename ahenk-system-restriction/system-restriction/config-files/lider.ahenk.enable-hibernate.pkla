@@ -1,0 +1,9 @@
+[Re-enable hibernate by default for login1]
+  Identity=unix-user:*
+  Action=org.freedesktop.login1.hibernate
+  ResultActive=#HIBERNATE_STATUS
+
+[Re-enable hibernate for multiple users by default in logind]
+  Identity=unix-user:*
+  Action=org.freedesktop.login1.hibernate-multiple-sessions
+  ResultActive=#HIBERNATE_STATUS
