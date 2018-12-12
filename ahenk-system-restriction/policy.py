@@ -20,7 +20,6 @@ class Sample(AbstractPlugin):
         if not self.is_exist(self.polkit_pkla_folder_path):
             self.create_directory(self.polkit_pkla_folder_path)
 
-
     def handle_policy(self):
         # TODO Do what do you want to do!
         # TODO Don't Forget returning response with <self.context.create_response(..)>
@@ -30,22 +29,21 @@ class Sample(AbstractPlugin):
             # DESKTOP SETTINGS
             if self.has_attr_json(self.parameters, 'hibernate') is True:
                 hibernate = self.parameters['hibernate']
-                self.settings_hibernate(hibernate)
-
+                self.hibernate_settings(hibernate)
             else:
                 self.logger.debug('Data has no parameter "hibernate"')
 
             if self.has_attr_json(self.parameters, 'desktop_settings') is True:
                 desktop_settings = self.parameters['desktop_settings']
                 action_id = self.default_action_pref.format(command="desktop_settings")
-                self.settings_terminal(desktop_settings, action_id)
+                self.desktop_settings(desktop_settings, action_id)
             else:
                 self.logger.debug('Data has no parameter "desktop_settings"')
 
             if self.has_attr_json(self.parameters, 'app_right_click') is True:
                 app_right_click = self.parameters['app_right_click']
                 action_id = self.default_action_pref.format(command="app_right_click")
-                self.settings_terminal(app_right_click, action_id)
+                self.desktop_settings(app_right_click, action_id)
             else:
                 self.logger.debug('Data has no parameter "app_right_click"')
 
@@ -53,7 +51,7 @@ class Sample(AbstractPlugin):
             if self.has_attr_json(self.parameters, 'panel_preferences') is True:
                 panel_preferences = self.parameters['panel_preferences']
                 action_id = self.default_action_pref.format(command="panel_preferences")
-                self.settings_terminal(panel_preferences, action_id)
+                self.panel_preferences(panel_preferences, action_id)
             else:
                 self.logger.debug('Data has no parameter "panel_preferences"')
 
@@ -61,24 +59,23 @@ class Sample(AbstractPlugin):
             if self.has_attr_json(self.parameters, 'xterm_terminal') is True:
                 xterm_terminal = self.parameters['xterm_terminal']
                 action_id = self.default_action_pref.format(command="xterm")
-                self.settings_terminal(xterm_terminal, action_id)
+                self.terminal_settings(xterm_terminal, action_id)
             else:
                 self.logger.debug('Data has no parameter "xterm_terminal"')
 
             if self.has_attr_json(self.parameters, 'xfce4_terminal') is True:
                 xfce4_terminal = self.parameters['xfce4_terminal']
                 action_id = self.default_action_pref.format(command="xfce4_terminal")
-                self.settings_terminal(xfce4_terminal, action_id)
+                self.terminal_settings(xfce4_terminal, action_id)
             else:
                 self.logger.debug('Data has no parameter "xfce4_terminal"')
 
             if self.has_attr_json(self.parameters, 'uxterm_terminal') is True:
                 uxterm_terminal = self.parameters['uxterm_terminal']
                 action_id = self.default_action_pref.format(command="uxterm_terminal")
-                self.settings_terminal(uxterm_terminal, action_id)
+                self.terminal_settings(uxterm_terminal, action_id)
             else:
                 self.logger.debug('Data has no parameter "uxterm_terminal"')
-
 
             self.logger.info('System restriction profile is handled successfully.')
             self.context.create_response(code=self.message_code.POLICY_PROCESSED.value,
@@ -89,7 +86,7 @@ class Sample(AbstractPlugin):
             self.context.create_response(code=self.message_code.POLICY_ERROR.value,
                                          message='Sistem kısıtlamaları politikası uygulanırken bir hata oluştu: {0}'.format(str(e)))
 
-    def settings_hibernate(self, hibernate_data):
+    def hibernate_settings(self, hibernate_data):
 
         temp_hibernate = "[Re-enable hibernate by default for login1]\n" \
                          "  Identity=unix-user:{1}\n" \
@@ -118,7 +115,7 @@ class Sample(AbstractPlugin):
         else:
             self.logger.info("{} file already exists".format(hibernate_settings_path))
 
-    def settings_terminal(self, rest, command_id):
+    def terminal_settings(self, rest, command_id):
 
         # close terminal if data is active
         privilege = None
@@ -136,12 +133,18 @@ class Sample(AbstractPlugin):
                    'ResultActive={privilege}\n'.format(username=self.username, command_id=command_id, privilege=privilege)
         terminal_settings_path = self.polkit_pkla_folder_path+"/"+command_id
 
-
         if not self.is_exist(terminal_settings_path):
             self.create_file(terminal_settings_path)
             self.write_file(terminal_settings_path, pkla_str)
             self.logger.info("Create file and write terminal data to {0} file ".format(terminal_settings_path))
             self.logger.info("Enabled hibernate settings successfully")
+
+    def desktop_settings(self, desktop_settings, action_id):
+        pass
+
+    def panel_preferences(self, panel_preferences, action_id):
+        pass
+
 
 
 def handle_policy(profile_data, context):
