@@ -16,6 +16,7 @@ class Sample(AbstractPlugin):
         self.username = self.context.get('username')
         self.default_action_pref = "lider.ahenk.pkexec.{command}.pkla"
         self.polkit_pkla_folder_path = "/etc/polkit-1/localauthority/99-ahenk.d"
+        self.apparmor_policy_path = "/etc/apparmor.d/{command_path}"
 
         if not self.is_exist(self.polkit_pkla_folder_path):
             self.create_directory(self.polkit_pkla_folder_path)
@@ -57,23 +58,20 @@ class Sample(AbstractPlugin):
 
             # SYSTEM SETTINGS
             if self.has_attr_json(self.parameters, 'xterm_terminal') is True:
-                xterm_terminal = self.parameters['xterm_terminal']
-                action_id = self.default_action_pref.format(command="xterm")
-                self.terminal_settings(xterm_terminal, action_id)
+                rest_status = self.parameters['xterm_terminal']
+                self.terminal_settings("xterm", rest_status)
             else:
                 self.logger.debug('Data has no parameter "xterm_terminal"')
 
             if self.has_attr_json(self.parameters, 'xfce4_terminal') is True:
-                xfce4_terminal = self.parameters['xfce4_terminal']
-                action_id = self.default_action_pref.format(command="xfce4_terminal")
-                self.terminal_settings(xfce4_terminal, action_id)
+                rest_status = self.parameters['xfce4_terminal']
+                self.terminal_settings("xfce4-terminal", rest_status)
             else:
                 self.logger.debug('Data has no parameter "xfce4_terminal"')
 
             if self.has_attr_json(self.parameters, 'uxterm_terminal') is True:
-                uxterm_terminal = self.parameters['uxterm_terminal']
-                action_id = self.default_action_pref.format(command="uxterm_terminal")
-                self.terminal_settings(uxterm_terminal, action_id)
+                rest_status = self.parameters['uxterm_terminal']
+                self.terminal_settings("uxterm", rest_status)
             else:
                 self.logger.debug('Data has no parameter "uxterm_terminal"')
 
@@ -115,37 +113,31 @@ class Sample(AbstractPlugin):
         else:
             self.logger.info("{} file already exists".format(hibernate_settings_path))
 
-    def terminal_settings(self, rest, command_id):
+    # restrictions with Apparmor
 
-        # close terminal if data is active
-        privilege = None
-        if rest == "1":
-            privilege = "yes"
-        # open terminal if data is active
-        elif rest == "0":
-            privilege = "no"
+    def terminal_settings(self, command, rest_status):
+        command_path = self.get_command_path(command)
+        command_path = command_path.replace('/', '.').lstrip('.')
+        if not self.is_exist(self.apparmor_policy_path.format(command_path=command_path)):
+            self.create_file(self.apparmor_policy_path.format(command_path=command_path))
+            self.logger.info("Created file {} ".format(self.apparmor_policy_path.format(command_path=command_path)))
+        else:
+            self.logger.info("{} file already exists".format(self.apparmor_policy_path.format(command_path=command_path)))
 
-        pkla_str = '[Normal Staff Permissions]\n' \
-                   'Identity=unix-user:{username}\n' \
-                   'Action={command_id}\n' \
-                   'ResultAny=no\n' \
-                   'ResultInactive=no\n' \
-                   'ResultActive={privilege}\n'.format(username=self.username, command_id=command_id, privilege=privilege)
-        terminal_settings_path = self.polkit_pkla_folder_path+"/"+command_id
-
-        if not self.is_exist(terminal_settings_path):
-            self.create_file(terminal_settings_path)
-            self.write_file(terminal_settings_path, pkla_str)
-            self.logger.info("Create file and write terminal data to {0} file ".format(terminal_settings_path))
-            self.logger.info("Enabled hibernate settings successfully")
+        #apparmor enforce mode
+        if rest_status == "0":
+            self.execute("aa-enforce {command}".format(command=command))
+            self.logger.info(command + " is restriction successfully")
+        # apparmor complain mode
+        else:
+            self.execute("aa-complain {command}".format(command=command))
+            self.logger.info("{} restriction removed".format(command))
 
     def desktop_settings(self, desktop_settings, action_id):
         pass
 
     def panel_preferences(self, panel_preferences, action_id):
         pass
-
-
 
 def handle_policy(profile_data, context):
     print('Sample Plugin Policy')
